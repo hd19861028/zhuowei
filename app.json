@@ -1,6 +1,6 @@
 {
 	"apps": {
-		"name": "schedule",
+		"name": "zhuowei",
 		"script": "index.js",
 		"args": [],
 		"node_args": [

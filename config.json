@@ -2,240 +2,30 @@
 	/** 全局模块路径 **/
 	"modulePath": "/opt/node/lib/node_modules/",
 	/** 应用程序名称，用于输出kibana日志 **/
-	"app": "scheduler-engine",
+	"app": "zhuowei-node",
 	/** 应用程序的启动端口，用于创建schedule **/
-	"port": 80,
-	/** 可选值：dev，test，prod **/
-	"env": "prod",
+	"port": 3000,
 	/** 开发模式 **/
 	"dev": false,
 	/** 用于控制日志输出 **/
 	"debug": true,
-	/** dev：192.168.10.1		本地：112.74.52.35 **/
-	"esServer": "192.168.10.1:9200",
-	/** 记录日志的级别：warning，trace，info，error，debug **/
-	"esServerLog": "warning",
-	/** 默认情况下，每次查询返回多少条错误记录的详情(数量过大会消耗大量带宽) **/
-	"esServerDefaultSize": 5,
-	/** schedule存储的index，默认从此index获取待执行的任务 **/
-	"scheduleIndex": "schedule",
-	/** 是否只有工作日才执行监控 **/
-	"onlyWorkDay": false,
-	/** mq使用哪个？1: alimq，2: kafka **/
-	"mq": 1,
-	/** ali MQ的配置参数 **/
-	"alimq": {
-		"env": "prod",
-		"tag": "customer_notification",
-		"dev": {
-			"domain": "publictest-rest.ons.aliyun.com",
-			"accessKey": "QOkQGFqxa5nykM3t",
-			"secretKey": "BHtmuzvkRjuBfOtP2Jw86T9NdZXyMc",
-			"topic": "bbc_device_dev",
-			"pid": "PID_bbc_device_dev"
-		},
-		"test": {
-			"domain": "publictest-rest.ons.aliyun.com",
-			"accessKey": "QOkQGFqxa5nykM3t",
-			"secretKey": "BHtmuzvkRjuBfOtP2Jw86T9NdZXyMc",
-			"topic": "bbc_device_test",
-			"pid": "PID_bbc_device_test"
-		},
-		"prod": {
-			"domain": "shenzhen-rest-internet.ons.aliyun.com",
-			"accessKey": "UkW3fizTeWzmkByb",
-			"secretKey": "HHiNWr9jyemDXjByzXuBn0fX74JTne",
-			"topic": "bbc_device_prod",
-			"pid": "PID_bbc_device_prod"
-		}
-	},
-	/** kafka的相关参数设置 **/
-	"kafka": {
-		"env": "dev",
-		"dev": {
-			"server": "zNode01:2181"
-		},
-		"test": {
-			"server": "192.168.30.11:2181"
-		},
-		"prod": {
-			"server": "192.168.40.11:2181"
-		},
-		"topic": "customer_notification"
-	},
-	/** elasticsearch的定时备份清理工作 **/
-	"esClear": {
-		"repository": "aliyun-emr",
-		/** 备份的配置，第一项不可以有任何修改 **/
-		"bk": [{
-			"index": "*",
-			"title": "snapshot"
-		}, {
-			"interval": "33 00 00 01 * *",
-			"index": ["schedule", ".kibana"],
-			"title": "snapshot_specify"
-		}],
-		/** 定时清理的配置 **/
-		"del": [{
-			/** 是否启动 **/
-			"enable": false,
-			/** 超时（秒） **/
-			"timeout": 30,
-			/** 清理的起始时间：从当前时间往前推多少天 **/
-			"lessDay": 30,
-			/** 清理的结束时间：从起始时间开始，往前推多少天 **/
-			"areaDay": 7,
-			/** 索引数组，不支持模糊匹配 **/
-			"index": ["device_command_v1", "device_notification_v1", "nginx-access-weixin", "nginx-access-cms", "nginx-access-devicehive", "nginx-access-vrstore", "nginx-access-vrstore_manage", "tomcat-catalina-vrstore", "tomcat-catalina-devicehive", "webapps-adas", "webapps-cms", "webapps-dchub", "webapps-devicehive", "webapps-eventengine", "webapps-ota", "webapps-vrstore", "webapps-weixin"],
-			"title": "es-clear",
-			"interval": "35 10 00 * * *"
-		}]
-	},
-	"emailReciver": "zhangshuisen@allwinnertech.com;wujinliang@allwinnertech.com;zhangwei@allwinnertech.com;zhoumingming@allwinnertech.com;huangjiebin@allwinnertech.com;yangfuyang@allwinnertech.com;hujindi@allwinnertech.com;alice@allwinnertech.com;zengxiliu@allwinnertech.com;zhangxu@allwinnertech.com",
-	"dh": {
-		/** 设置超时时间，超过设置的时间没有返回则视为失败，单位：秒 **/
-		"timeout": 55,
-		/** 设置dh执行间隔 **/
-		"interval": "37 */30 * * * *",
-		"dev": {
-			"wsurl": "ws://112.74.160.43/dh/v2/websocket",
-			"url": "http://112.74.160.43/dh/v2/rest",
-			"licence": "ac6e6c186e8c906cdbc1dc7b0a9293f22fc6bf5be6344d5135ed0e899fda3b39077143566ac445d1",
-			"vendor": "dazhangwei",
-			"modle": "DaTest"
-		},
-		"test": {
-			"wsurl": "ws://112.74.165.90/dh/v2/websocket",
-			"url": "http://112.74.165.90/dh/v2/rest",
-			"licence": "76f85480b63e5daf3a46b9c816d164bbd31eefc50fe746a24ee75ba7ce8365c903df53c64946d975",
-			"vendor": "allwinnerwxtest",
-			"modle": "weida"
-		},
-		"prod": {
-			"wsurl": "ws://ws.bigbigcloud.cn/dh/v2/websocket",
-			"url": "http://api.bigbigcloud.cn/dh/v2/rest",
-			"licence": "5246963b7040e3a1f4c27f675587a4fe0e0abc8b31f3af7d204d1e6f82aee2e430711cc48e006ea6",
-			"vendor": "test",
-			"modle": "productone"
-		}
-	},
-	/** 跟redis数据清理有关的配置 **/
-	"redis": {
-		"env": "prod",
-		"dev": {
-			"nodes": [
-				{
-					"host": "fd732bb46c1b4948.m.cnsza.kvstore.aliyuncs.com",
-					"port": 6379
-				}
-			],
-			"options": {
-				"authPass": "ALLwinner123",
-				"usePromise": true
-			}
-		},
-		"test": {
-			"nodes": [
-				{
-					"host": "b40f088155864df8.m.cnsza.kvstore.aliyuncs.com",
-					"port": 6379
-				}
-			],
-			"options": {
-				"authPass": "ALLtest123",
-				"usePromise": true
-			}
-		},
-		"prod": {
-			"nodes": [
-				{
-					"host": "144abacbdd6f4b37.m.cnsza.kvstore.aliyuncs.com",
-					"port": 6379
-				}
-			],
-			"options": {
-				"authPass": "1eOWcfO1T2Be",
-				"usePromise": true
-			}
-		},
-		/** 默认去删除多少天之前的数据 **/
-		"expire": 30,
-		/** 过期时间的规则是否满足utc时间，如果是采用中国东八区，则改为false **/
-		"isutc": true,
-		/** 只填写主表，无需填写子表"notification"和"command"。这2个子表的数据我会自动删除的。 **/
-		"clear": [
-			"devicenotifications",
-			"devicecommands"
-		],
-		/** 清除单个key集合，没有主从关系的key **/
-		"clear-single": {
-			"hash": [
-				{
-					"expire": 30,
-					"name": "usrinfo"
-				},
-				"deviceonline"
-			],
-			"sort": [],
-			"set": [],
-			"common": [
-				{
-					"expire": 30,
-					"name": "logined"
-				},
-				"emailvcode",
-				"smsvcode"
-			]
-		},
-		/** redis清理程序的默认执行间隔 **/
-		"interval": "39 00 01 * * *"
-	},
-	/** ota生产环境的监控 **/
-	"ota": {
-		"interval": "41 */30 * * * *"
-	},
-	/** adas生产环境的监控 **/
-	"adas": {
-		"interval": "43 */30 * * * *",
-		"appId": "910000001",
-		"appSecret": "1e0325bff839ac38e2ea627b0e9c7d38"
-	},
-	/** cms的监控 **/
-	"cms": {
-		"interval": "45 */30 * * * *"
-	},
-	/** 每多长时间更新schedule设置，默认1分钟 **/
-	"scheduleUpdateInterval": "00 */1 * * * *",
-	/** 每多长时间重新发送失败的消息到kafka，默认1分钟 **/
-	"resendKafkaInterval": "05 */1 * * * *",
-	/** 创建job的默认值设置 **/
-	"defaultJob": {
-		"trigger": {
-			"schedule": {}
-		},
-		"input": {
-			"search": {
-				"request": {}
-			}
-		},
-		"condition": {
-			"compare": {}
-		},
-		"actions": {
-			"send_email": {
-				"channel": "EMAIL",
-				"properties": {
-					"format": "html",
-					"from": "SchedulerEngine"
-				}
-			},
-			"send_sms": {
-				"channel": "SMS",
-				"properties": {
-					"phoneNumber": "",
-					"content": ""
-				}
-			}
-		}
-	}
+	/** AES加密密钥 **/
+	"ase_key": "65d460d57ddfd8865d17e652b6d530cc",
+	/** 微信公众好有关的配置 **/
+    "website":{
+    	"domain": "wechat.zhwcorp.com",
+    	"appid":"wxf5acb077b0002318",
+    	"secret":"5d61f1b6c3e65ccb5d2fcc0ee9d27e75",
+    	"site_token":"linchuangyiliaojishufuwupintai",
+    	"openid_expire":31536000000
+    },
+    /** redis缓存配置 **/
+    "cache": {
+        "ip": "127.0.0.1",
+        "port": 6379,
+        "timeout": 3000,
+        "expire": 300,
+        "db_count":16,
+        "enable": true
+    },
 }
