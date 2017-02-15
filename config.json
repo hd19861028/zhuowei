@@ -27,5 +27,5 @@
         "expire": 300,
         "db_count":16,
         "enable": true
-    },
+    }
 }
