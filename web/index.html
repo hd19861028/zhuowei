@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:ng="http://angularjs.org" id="ng-app" ng-app="app" class="ng-app:app">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<title>注册监控请求</title>
+		<link rel="stylesheet" href="lib/m.css" />
+		<link rel="stylesheet" href="css/main.css" />
+		<style>
+			input {
+				width: 20%;
+				min-width: 300px;
+			}
+		</style>
+	</head>
+
+	<body ng-controller="BaseController">
+		<div class="row" style="padding-top: 30px; width: 70%;">
+			<form class="col s12">
+				<div class="row icon-container">
+					<div class="input-field col s12" style="margin-bottom: 15px;">
+						<input id="name" class="validate" ng-model="info.name" ph="支持中文，但不要输入空格" style="margin-bottom: 0;" ng-change="ChangeName()">
+						<label for="name" ng-class="{true:'active',false:''}[info.name.length>0]">监控名称</label>
+						<div class="collection" style="margin-top: 0; " ng-show="showNames">
+							<a href="#!" class="collection-item" ng-click="SelectOneName(s)" ng-repeat='s in selected'>{{s}}</a>
+						</div>
+					</div>
+					<div style="padding-left: 10px;">
+						<a class="waves-effect waves-light btn" ng-click="Search()">查询</a>
+						<a class="waves-effect waves-light btn" ng-click="ShowModal()">抹掉</a>
+					</div>
+				</div>
+
+				<div class="input-field col s12">
+					<select ng-model="info.type">
+						<option value="interval">间隔</option>
+						<option value="at">在固定时间点</option>
+					</select>
+					<label>Schedule类型</label>
+				</div>
+
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="interval" class="validate" ng-model="info.interval" ph="s(秒)，m(分)，h(小时)，d(天)">
+						<label for="interval" ng-class="{true:'active',false:''}[info.interval.length>0]">执行间隔</label>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="indexname" class="validate" ng-model="info.indexname" ph="ElasticSearch中对应的索引名称" ng-blur="IndexChange()">
+						<label for="indexname" ng-class="{true:'active',false:''}[info.indexname.length>0]">ES索引名称</label>
+					</div>
+				</div>
+
+				<div class="row" id="fields" ng-hide="info.notistype=='sms'" ng-if="fields.length>0">
+					<div class="input-field col s12">
+						<label class="active">设置推送的字段</label>
+						<p>
+							<input type="checkbox" class="filled-in" id="f{{$index}}" name="fields" value="{{f.name}}" ng-checked="f.active" ng-repeat-start="f in fields" />
+							<label for="f{{$index}}" style="width: 210px" ng-repeat-end="f in fields">{{f.name}}</label>
+						</p>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="input-field col s12">
+						<textarea id="query" class="materialize-textarea" ng-model="info.query"></textarea>
+						<label for="query" ng-class="{true:'active',false:''}[info.query.length>0]">ES查询条件</label>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="comparefield" class="validate" ng-model="info.comparefield">
+						<label for="comparefield" ng-class="{true:'active',false:''}[info.comparefield.length>0]">比较字段</label>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="comparetype" class="validate" ng-model="info.comparetype" ph="支持的操作符：gt，gte，lt，lte，e">
+						<label for="comparetype" ng-class="{true:'active',false:''}[info.comparetype.length>0]">比较操作符</label>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="comparevalue" class="validate" ng-model="info.comparevalue">
+						<label for="comparevalue" ng-class="{true:'active',false:''}[info.comparevalue>=0 && info.comparevalue.toString().length>0]">比较结果</label>
+					</div>
+				</div>
+
+				<div class="input-field col s12">
+					<select ng-model="info.notistype">
+						<option value="email">发邮件</option>
+						<option value="sms">发短信</option>
+					</select>
+					<label>通知类型</label>
+				</div>
+
+				<div class="row">
+					<div class="input-field col s12">
+						<textarea id="notisto" class="materialize-textarea" ng-model="info.notisto"></textarea>
+						<label for="notisto" ng-class="{true:'active',false:''}[info.notisto.length>0]">通知接收人</label>
+					</div>
+				</div>
+
+				<div class="row" ng-hide="info.notistype=='sms'">
+					<div class="input-field col s12">
+						<input id="notissubject" class="validate" ng-model="info.notissubject">
+						<label for="notissubject" ng-class="{true:'active',false:''}[info.notissubject.length>0]">通知标题</label>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="input-field col s12">
+						<pre><textarea id="notisbody" class="materialize-textarea" ng-model="info.notisbody"></textarea></pre>
+						<label for="notisbody" ng-class="{true:'active',false:''}[info.notisbody.length>0]">通知内容</label>
+					</div>
+				</div>
+
+				<a class="waves-effect waves-light btn-large" ng-click="Submit()"><i class="material-icons left"></i>提交</a>
+			</form>
+		</div>
+
+		<div id="modal" class="modal">
+			<div class="modal-content">
+				<h4>删除</h4>
+				<p>确定删除
+					<font style="color: red;" ng-bind="info.name"></font>&nbsp;吗？</p>
+				<p>删除后，该Schedule将会立即停止，并且对应的数据也将
+					<font style="color: red;">永久物理性删除</font>
+				</p>
+			</div>
+			<div class="modal-footer">
+				<a href="javascript:;" class="waves-effect btn secondary-content" ng-click="HideModal()" style="background-color: #ccc;margin-left: 20px;margin-right: 20px;">取消</a>
+				<a href="javascript:;" class="waves-effect waves-light btn secondary-content" ng-click="Delete()">确定</a>
+			</div>
+		</div>
+
+		<script type="text/javascript" src="lib/jquery.js"></script>
+		<script type="text/javascript" src="lib/angular.js"></script>
+		<script type="text/javascript" src="lib/m.js"></script>
+		<script type="text/javascript" src="lib/app.js"></script>
+		<script type="text/javascript" src="js/base.js"></script>
+		<script type="text/javascript" src="js/factory.js"></script>
+	</body>
+
+</html>

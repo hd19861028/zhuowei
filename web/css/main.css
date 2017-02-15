@@ -1,0 +1,72 @@
+.msgtips {
+	width: 100%;
+	text-align: center;
+	height: 40px;
+	line-height: 40px;
+	font-size: 14px;
+	color: #fff;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 9999999999;
+	-webkit-animation: animSlideTop 0.3s 0s forwards;
+	animation: animSlideTop 0.3s 0s forwards;
+}
+
+.msgtips.e {
+	background: #ff6666;
+}
+
+.msgtips.s {
+	background: #41bf54;
+}
+
+.msgtips.out {
+	-webkit-animation: animOut 0.3s 0s forwards;
+	animation: animOut 0.3s 0s forwards;
+}
+
+@keyframes animSlideTop {
+	0% {
+		opacity: 1;
+		transform: translate3d(0, -100%, 0);
+	}
+	100% {
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
+	}
+}
+
+@keyframes animOut {
+	0% {
+		transform: translate3d(0, 0, 0);
+		opacity: 1;
+	}
+	100% {
+		transform: translate3d(0, -100%, 0);
+		opacity: 0;
+	}
+}
+
+@-webkit-keyframes animSlideTop {
+	0% {
+		opacity: 1;
+		-webkit-transform: translate3d(0, -100%, 0);
+	}
+	100% {
+		opacity: 1;
+		-webkit-transform: translate3d(0, 0, 0);
+	}
+}
+
+@-webkit-keyframes animOut {
+	0% {
+		-webkit-transform: translate3d(0, 0, 0);
+		opacity: 1;
+	}
+	100% {
+		-webkit-transform: translate3d(0, -100%, 0);
+		opacity: 0;
+	}
+
+}

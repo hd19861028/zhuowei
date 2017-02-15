@@ -1,0 +1,15 @@
+{
+	"apps": {
+		"name": "schedule",
+		"script": "index.js",
+		"args": [],
+		"node_args": [
+			"--expose-gc",
+			"--max_old_space_size=300"
+		],
+		"exec_mode": "fork",
+		"pid_file": "./log/test.pid",
+		"watch": false,
+		"max_restarts": 10
+	}
+}
