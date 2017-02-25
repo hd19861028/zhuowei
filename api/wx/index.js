@@ -10,8 +10,9 @@ var config = global.config.website;
 
 var app = express();
 
-app.post('*', function(req, res) {
+app.post('/', function(req, res) {
 	var result = "";
+	
 	req.on('data', function(chunk) {
 		result += chunk.toString();
 	});
@@ -61,8 +62,9 @@ app.get('/redirect', function(req, res) {
 	state == "s3" && (suc_url = web + "hr-info.html");
 	state == "s4" && (suc_url = web + "qiuzhi-info.html");
 	bind_url += encodeURIComponent(suc_url);
-	
+
 	if(openid) {
+		console.log('openid1 --> ' + openid);
 		res.redirect(suc_url);
 	} else {
 		var code = req.query.code;
@@ -72,6 +74,7 @@ app.get('/redirect', function(req, res) {
 		request.Get(url, {})
 			.then(function(msg) {
 				if(msg && msg.openid) {
+					console.log('openid2 --> ' + openid);
 					res.setCookiesSafe(global.ckey.openid, msg.openid, config.openid_expire);
 					res.redirect(suc_url);
 				} else {
@@ -83,6 +86,41 @@ app.get('/redirect', function(req, res) {
 			})
 	}
 
+});
+
+app.post('/notification', function(req, res) {
+	var result = "";
+	var data = {}
+	
+	req.on('data', function(chunk) {
+		result += chunk.toString();
+	});
+	req.on('end', function() {
+		var template = null;
+		try {
+			template = JSON.parse(result);
+			weixin.push_notise(template.openid, template.templateid, template.data, template.backurl)
+				.then(function(msg) {
+					if(msg == "") {
+						data.status = true;
+						data.msg = "发送成功";
+					} else {
+						data.status = false;
+						data.msg = msg.stack || msg;
+					}
+					res.json(data);
+				}).catch(function(e) {
+					console.log(e)
+					data.status = false;
+					data.msg = msg.stack || msg;
+					res.json(data);
+				})
+		} catch(e) {
+			data.status = false;
+			data.msg = "无效的json格式";
+			res.json(data);
+		}
+	});
 });
 
 exports = module.exports = app;
