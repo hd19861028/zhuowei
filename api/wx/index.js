@@ -17,7 +17,7 @@ app.post('*', function(req, res) {
 	});
 	req.on('end', function() {
 		//console.log("----------------原xml-------------------")
-		console.log(result)
+		//console.log(result)
 		common.xmlToJson(result, function(json) {
 			//console.log("----------------解析后-------------------")
 			//console.log(json);

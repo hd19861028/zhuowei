@@ -13,7 +13,7 @@ app.all('*', function(req, res) {
 	
 	res.locals.memberid = req.cookies(global.ckey.memberid);
 	res.locals.openid = req.cookiesSafe(global.ckey.openid);
-	console.log(res.locals)
+	
 	req.next();
 });
 
