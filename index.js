@@ -24,6 +24,7 @@ config.static = './web'
 global.config = config;
 
 global.m = {
+	"bk": path.join(__dirname, 'bk', 'index.js'),
 	"common": globalModulePath + "wx-common",
 	"compression": globalModulePath + "compression",
 	"q": globalModulePath + "q",

@@ -65,7 +65,7 @@ app.get('/redirect', function(req, res) {
 
 	if(openid) {
 		console.log('openid1 --> ' + openid);
-		res.redirect(suc_url);
+		res.redirect(bind_url);
 	} else {
 		var code = req.query.code;
 		var appid = config.appid;
@@ -76,7 +76,7 @@ app.get('/redirect', function(req, res) {
 				if(msg && msg.openid) {
 					console.log('openid2 --> ' + openid);
 					res.setCookiesSafe(global.ckey.openid, msg.openid, config.openid_expire);
-					res.redirect(suc_url);
+					res.redirect(bind_url);
 				} else {
 					res.send(msg);
 				}

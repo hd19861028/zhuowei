@@ -65,30 +65,8 @@ app.controller('BaseController', ['$scope', 'BaseService',
 
 		$scope.info = {};
 
-		function BindEvent(isPageLoad) {
-			$('select').material_select();
-			$('textarea').trigger('autoresize');
-
-			if(isPageLoad == 1) {
-				$('.validate').each(function(index) {
-					var next = $(this).next();
-					$(this).off('focus');
-					$(this).on('focus', function() {
-						$(next).addClass('active');
-						$(this).attr('placeholder', $(this).attr('ph'))
-					})
-
-					$(this).off('blur');
-					$(this).on('blur', function() {
-						if($(this).val().length == 0) {
-							$(next).removeClass('active')
-						}
-						$(this).attr('placeholder', '')
-					})
-				})
-			}
-		}
-		
-		BindEvent();
+		$('body').addClass('body-show');
+		$('select').material_select();
+		$('textarea').trigger('autoresize');
 	}
 ]);

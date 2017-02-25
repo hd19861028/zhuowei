@@ -6,19 +6,54 @@
 		<meta http-equiv="Pragma" content="no-cache">
 		<meta http-equiv="Cache-Control" content="no-cache">
 		<meta http-equiv="Expires" content="0">
-		<title>我的信息</title>
+		<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+		<title>帐号绑定</title>
 		<link rel="stylesheet" href="lib/m.css" />
 		<link rel="stylesheet" href="css/main.css" />
-		<style>
-			input {
-				width: 20%;
-				min-width: 300px;
-			}
-		</style>
 	</head>
 
 	<body ng-controller="BaseController">
-		
+		<div class="row" style="margin-top: 25%;">
+			<form class="col s12">
+				<div class="row">
+					<div class="input-field col s2"></div>
+					<div class="input-field col s8">
+						<input id="icon_prefix" type="text" class="validate" maxlength="10">
+						<label for="icon_prefix" class="active">姓名</label>
+					</div>
+					<div class="input-field col s2"></div>
+				</div>
+				<div class="row">
+					<div class="input-field col s2"></div>
+					<div class="input-field col s8" style="margin-top: 0;">
+						<input id="icon_prefix" type="tel" class="validate" maxlength="11">
+						<label for="icon_prefix" class="active">手机</label>
+					</div>
+					<div class="input-field col s2"></div>
+				</div>
+				<div class="row">
+					<div class="input-field col s2"></div>
+					<div class="input-field col s8" style="margin-top: 0;">
+						<select>
+							<option value="" disabled selected>选择性别</option>
+							<option value="m">男</option>
+							<option value="w">女</option>
+						</select>
+						<label></label>
+					</div>
+					<div class="input-field col s2"></div>
+				</div>
+				<div class="row">
+					<div class="input-field col s2"></div>
+					<div class="input-field col s8">
+						<a class="waves-effect waves-light btn" style="width: 100%;">注册</a>
+					</div>
+					<div class="input-field col s2"></div>
+				</div>
+
+			</form>
+		</div>
+
 		<script type="text/javascript" src="lib/jquery.js"></script>
 		<script type="text/javascript" src="lib/angular.js"></script>
 		<script type="text/javascript" src="lib/m.js"></script>
