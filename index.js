@@ -30,6 +30,11 @@ global.m = {
 	"express": globalModulePath + "express"
 }
 
+global.ckey = {
+	"memberid": "memberid",
+	"openid": "openid"
+}
+
 require(global.m.common).prototype;
 
 require('./api');

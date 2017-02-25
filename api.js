@@ -6,7 +6,14 @@ var app = express();
 app.use(compress()); 
 app.use(express.static(global.config.static))
 
+var middleware = require('./middleware')
+app.use(middleware.cookieParse);
+
 app.all('*', function(req, res) {
+	
+	res.locals.memberid = req.cookies(global.ckey.memberid);
+	res.locals.openid = req.cookiesSafe(global.ckey.openid);
+	console.log(res.locals)
 	req.next();
 });
 

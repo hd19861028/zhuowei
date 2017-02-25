@@ -13,7 +13,7 @@
 	"ase_key": "65d460d57ddfd8865d17e652b6d530cc",
 	/** 微信公众好有关的配置 **/
     "website":{
-    	"domain": "wechat.zhwcorp.com",
+    	"domain": "wechat.zhweicorp.com",
     	"appid":"wxf5acb077b0002318",
     	"secret":"5d61f1b6c3e65ccb5d2fcc0ee9d27e75",
     	"site_token":"linchuangyiliaojishufuwupintai",
