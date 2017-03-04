@@ -32,7 +32,7 @@ global.m = {
 }
 
 global.ckey = {
-	"memberid": "memberid",
+	"userid": "userid",
 	"openid": "openid"
 }
 

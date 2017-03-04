@@ -1,10 +1,12 @@
 {
 	/** 全局模块路径 **/
 	"modulePath": "/opt/node/lib/node_modules/",
+	/** 后台路径 **/
+	"bk": "http://localhost:3303/api/API",
 	/** 应用程序名称，用于输出kibana日志 **/
 	"app": "zhuowei-node",
 	/** 应用程序的启动端口，用于创建schedule **/
-	"port": 3000,
+	"port": 3300,
 	/** 开发模式 **/
 	"dev": false,
 	/** 用于控制日志输出 **/

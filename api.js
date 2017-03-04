@@ -11,7 +11,7 @@ app.use(middleware.cookieParse);
 
 app.all('*', function(req, res) {
 	
-	res.locals.memberid = req.cookies(global.ckey.memberid);
+	res.locals.userId = req.cookies(global.ckey.userid);
 	res.locals.openid = req.cookiesSafe(global.ckey.openid);
 	
 	req.next();

@@ -2,9 +2,11 @@ var express = require(global.m.express);
 var weixin = require(global.m.common).weixin;
 var common = require(global.m.common).common;
 var request = require(global.m.common).request;
+var bk = require(global.m.bk);
 var qs = require('querystring');
 var path = require('path');
 var fs = require('fs');
+
 var q = Promise;
 var config = global.config.website;
 
@@ -12,7 +14,7 @@ var app = express();
 
 app.post('/', function(req, res) {
 	var result = "";
-	
+
 	req.on('data', function(chunk) {
 		result += chunk.toString();
 	});
@@ -54,18 +56,48 @@ app.get('/redirect', function(req, res) {
 	var domain = config.domain;
 	var web = 'http://' + domain + '/';
 	var state = req.query.state;
+	var type = 1; //0：hr，1：求职者
 	var openid = res.locals.openid;
 	var suc_url = "";
 	var bind_url = web + 'hr-bind.html?rurl=';
-	state == "s1" && (suc_url = web + "hr-tuijian.html");
-	state == "s2" && (suc_url = web + "hr-history.html");
-	state == "s3" && (suc_url = web + "hr-info.html");
+	state == "s1" && (suc_url = web + "hr-tuijian.html", type = 0);
+	state == "s2" && (suc_url = web + "hr-history.html", type = 0);
+	state == "s3" && (suc_url = web + "hr-info.html", type = 0);
 	state == "s4" && (suc_url = web + "qiuzhi-info.html");
 	bind_url += encodeURIComponent(suc_url);
 
+	var getUserInfo = function(oid) {
+		return bk.WeiXinBinding(oid)
+			.then(function(r) {
+				res.setCookies(global.ckey.userid, r.userID, config.openid_expire);
+				res.setCookiesSafe(global.ckey.openid, oid, config.openid_expire);
+				return bk.UserInfo(r.userID, type)
+			})
+			.then(function(r) {
+				if(r.status != undefined) {
+					//https://api.weixin.qq.com/cgi-bin/user/info?access_token=&openid=&lang=zh_CN
+					//如果用户是HR，根据status状态判断当前是否已审批
+					//审批通过：成功页
+					if(r.status == "Verified") {
+						res.redirect(suc_url);
+					}
+					//未审批：我的信息页
+					if(r.status == "New") {
+						res.redirect(web + "hr-info.html");
+					}
+					//禁用：我的信息页
+					if(r.status == "Disable") {
+						res.redirect(web + "hr-info.html");
+					}
+				} else //如果没有状态字段，用户是求职者，直接跳到成功页
+					res.redirect(suc_url);
+			}, function(e) {
+				res.redirect(bind_url);
+			});
+	}
+
 	if(openid) {
-		console.log('openid1 --> ' + openid);
-		res.redirect(bind_url);
+		getUserInfo(openid);
 	} else {
 		var code = req.query.code;
 		var appid = config.appid;
@@ -74,15 +106,13 @@ app.get('/redirect', function(req, res) {
 		request.Get(url, {})
 			.then(function(msg) {
 				if(msg && msg.openid) {
-					console.log('openid2 --> ' + openid);
-					res.setCookiesSafe(global.ckey.openid, msg.openid, config.openid_expire);
-					res.redirect(bind_url);
+					getUserInfo(msg.openid);
 				} else {
 					res.send(msg);
 				}
 			}, function(err) {
-				console.error("/weixin/index.js --> line: 119")
-				console.error(err)
+				err.WriteLog();
+				res.send(err.message);
 			})
 	}
 
@@ -91,7 +121,7 @@ app.get('/redirect', function(req, res) {
 app.post('/notification', function(req, res) {
 	var result = "";
 	var data = {}
-	
+
 	req.on('data', function(chunk) {
 		result += chunk.toString();
 	});

@@ -6,14 +6,90 @@
 		<meta http-equiv="Pragma" content="no-cache">
 		<meta http-equiv="Cache-Control" content="no-cache">
 		<meta http-equiv="Expires" content="0">
+		<meta content='telephone=no' name='format-detection' />
 		<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
 		<title>我要推荐</title>
 		<link rel="stylesheet" href="lib/m.css" />
 		<link rel="stylesheet" href="css/main.css" />
+		<style>
+			.blue-grey.darken-1 {
+				background-color: #00aa88 !important;
+			}
+			
+			.card .card-content {
+				padding: 10px 20px;
+			}
+			
+			.card .card-content .card-title {
+				line-height: 35px;
+			}
+			
+			.card .card-title {
+				font-size: 18px;
+			}
+			
+			.card .card-action {
+				padding: 10px 20px;
+				text-align: right;
+				border-top: 1px solid rgba(255, 255, 255, 0.5);
+			}
+			
+			.card .card-action a:not(.btn):not(.btn-large):not(.btn-floating) {
+				margin-right: 0;
+			}
+			
+			p {
+				-webkit-margin-before: 0em;
+				-webkit-margin-after: 0em;
+			}
+			
+			.row {
+				margin-bottom: 5px;
+				font-size: 0.875em;
+			}
+			
+			.commission {
+				text-align: right;
+				font-weight: bold;
+				font-size: 1.125em;
+			}
+		</style>
 	</head>
 
 	<body ng-controller="BaseController">
-		
+		<div class="wx_loading" id="wxloading">
+			<div class="wx_loading_inner">
+				<i class="wx_loading_icon"></i> 页面加载中…
+			</div>
+		</div>
+
+		<div class="container" ng-controller="InfoListController">
+			<div class="row" ng-repeat="item in infos">
+				<div class="col s12 m6">
+					<div class="card blue-grey darken-1">
+						<div class="card-content white-text">
+							<span class="card-title text-line1" ng-bind="item.title"></span>
+							<div class="row">
+								<div class="col s6" ng-bind="item.area"></div>
+								<div class="col s6 ">
+									佣金: <span class="commission" ng-bind="item.commission"></span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col s12 text-line1" ng-bind="item.description"></div>
+							</div>
+							<div class="row" ng-show="item.remarks && item.remarks.length>0">
+								<div class="col s12 text-line1" ng-bind="item.remarks"></div>
+							</div>
+						</div>
+						<div class="card-action">
+							<a href="#" ng-click="Recommend(item)">我要推荐</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<script type="text/javascript" src="lib/jquery.js"></script>
 		<script type="text/javascript" src="lib/angular.js"></script>
 		<script type="text/javascript" src="lib/m.js"></script>

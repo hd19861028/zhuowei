@@ -46,5 +46,6 @@ app.get('/pm2', function(req, res) {
 
 app.use('/wx', require('./wx/index'));
 app.use('/token', require('./token/index'));
+app.use('/web', require('./web/index'));
 
 exports = module.exports = app;

@@ -1,125 +1,84 @@
 app.factory('BaseService', ['$q', '$http',
 	function($q, $http) {
 
-		var searchES = function(name, isPageLoad) {
-			var d = $q.defer();
-			$http.post("/api/search", {
-					name: name || '',
-					init: isPageLoad || 0
-				})
-				.success(function(data, status) {
-					d.resolve(data);
-				}).error(function(data, status) {
-					DefaultError(data)
-				});
-			return d.promise;
+		var apibase = "/api/web"
+		var _api = {
+			user: {
+				base: apibase + '/user',
+				register: function(user) {
+					return _post(this.base + '/register', user)
+				},
+				info: function(type) {
+					return _get(this.base + '/info', { type: type })
+				}
+			},
+			info: {
+				base: apibase + '/info',
+				recommend: function(param) {
+					return _post(this.base + '/recommend', param)
+				},
+				list: function(size, index) {
+					return _get(this.base + '/list', { size: size, index: index })
+				}
+			}
+		};
+
+		var _header = {
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			timeout: 15000
 		}
 
-		var namesES = function() {
+		var _post = function(url, data) {
+			Loading(true);
 			var d = $q.defer();
-			$http({
-					method: "get",
-					url: "/api/names",
-					responseType: "json",
-					timeout: "5000",
-					cache: true,
-					params: {}
-				})
-				.success(function(data, status) {
-					d.resolve(data);
-				}).error(function(data, status) {
-					DefaultError(data)
-				});
-			return d.promise;
-		}
 
-		var deleteES = function(name) {
-			var d = $q.defer();
-			$http.post("/api/delete", {
-					name: name
-				})
-				.success(function(data, status) {
-					d.resolve(data);
-				}).error(function(data, status) {
-					DefaultError(data)
-				});
-			return d.promise;
-		}
-
-		var submitES = function(info) {
-			var d = $q.defer();
-			$http.post("/api/save", info)
-				.success(function(data, status) {
-					d.resolve(data);
-				}).error(function(data, status) {
-					DefaultError(data)
-				});
-			return d.promise;
-		}
-
-		var loadFields = function(index) {
-			var d = $q.defer();
-			$http({
-					method: "get",
-					url: "/api/fields",
-					responseType: "json",
-					timeout: "5000",
-					cache: true,
-					params: {
-						index: index
+			$http.post(url, JSON.stringify(data), _header)
+				.success(function(r, statusCode) {
+					if(r.status) {
+						d.resolve(r.data);
+					} else {
+						MsgError(r.message);
 					}
 				})
-				.success(function(data, status) {
-					d.resolve(data);
-				}).error(function(data, status) {
-					DefaultError(data)
-				});
-			return d.promise;
-		}
-
-		var loadCfg = function() {
-			var d = $q.defer();
-			$http({
-					method: "get",
-					url: "/api/config",
-					responseType: "json",
-					timeout: "5000",
-					cache: true
+				.error(function(err, status) {
+					Loading(false);
+					MsgError(err);
 				})
-				.success(function(data, status) {
-					d.resolve(data);
-				}).error(function(data, status) {
-					DefaultError(data)
-				});
 			return d.promise;
 		}
 
-		var saveCfg = function(cfg, isStart) {
-			var d = $q.defer();
-			var param = {
-				data: angular.fromJson(cfg),
-				restart: isStart
+		var _get = function(url, data) {
+			Loading(true);
+			if(data) {
+				for(var k in data) {
+					if(data[k] === '') delete data[k]
+				}
 			}
-			
-			param = angular.toJson(param);
-			
-			$http.post("/api/config", param)
-				.success(function(data, status) {
-					d.resolve(data);
-				}).error(function(data, status) {
-					DefaultError(data)
-				});
+			var d = $q.defer();
+			var _param = {
+				method: 'get',
+				url: url,
+				responseType: 'json',
+				params: data
+			};
+			angular.extend(_param, JSON.parse(JSON.stringify(_header)));
+			$http(_param)
+				.success(function(r, statusCode) {
+					if(r.status) {
+						d.resolve(r.data);
+					} else {
+						MsgError(r.message);
+					}
+				})
+				.error(function(err, status) {
+					Loading(false);
+					MsgError(err);
+				})
 			return d.promise;
 		}
 
-		return {
-			search: searchES,
-			del: deleteES,
-			submit: submitES,
-			fields: loadFields,
-			names: namesES,
-			cfg: loadCfg,
-			cfgSave: saveCfg
-		};
+		return _api;
 	}
 ]);

@@ -1,72 +1,123 @@
-function DefaultError(err) {
-	Msg('服务器正忙，请重试！')
-}
-
-Array.prototype.IsInArray = function(n) {
-	var index = -1;
-	for(var i = 0; i < this.length; i++) {
-		if(this[i] == n) {
-			index = i;
-		}
-	}
-	return index;
-}
-
-function Msg(msg, type, callbackFun, time) {
-	if(!time) {
-		time = 3 * 1000;
-	} else {
-		time = time * 1000;
-	}
-	type = type ? type : 'e'
-	if($(".msgtips").length > 0) {
-		$(".msgtips").remove();
-	}
-
-	var strinner = "<div class='msgtips " + type + "'>" + msg + "</div>";
-	$(document.body).append(strinner);
-	var timer = setTimeout(function() {
-		var t = document.querySelector(".msgtips");
-		$(t).addClass("out");
-		t.addEventListener("animationend", function() { //动画结束时事件
-			$(t).remove();
-			$.isFunction(callbackFun) ? callbackFun() : $.noop;
-		}, false);
-		clearTimeout(timer);
-	}, time);
-}
-
-function Valid(obj) {
-	var result = true;
-	var novalid = ["notissubject", "pushfields"]
-	for(key in obj) {
-		if(!obj[key]) {
-			result = false;
-		}
-		if(novalid.IsInArray(key) >= 0) result = true;
-	}
-	return result;
-}
-
-function StartTime(ts) {
-	var seconds = new Date(ts).getSeconds();
-	var timer = setInterval(function() {
-		if(seconds == 0 || seconds == 60) {
-			clearInterval(timer);
-			Msg('您提交的Schedule，服务器已更新！', 's')
-		}
-		seconds += 1;
-	}, 1000)
-}
-
 /* Controllers */
 app.controller('BaseController', ['$scope', 'BaseService',
-	function($scope, BaseService) {
+	function($scope, db) {
 
 		$scope.info = {};
+		$scope.pageSize = 10;
 
 		$('body').addClass('body-show');
 		$('select').material_select();
 		$('textarea').trigger('autoresize');
+
+		var sex = function(sex) {
+			var r = "";
+			sex == "male" && (r = "男");
+			sex == "female" && (r = "女");
+			return r;
+		}
+
+		var status = function(s) {
+			var r = "";
+			s == "New" && (r = "认证中");
+			s == "Verified" && (r = "已认证");
+			s == "Disable" && (r = "已禁用");
+			return r;
+		}
+
+		$scope.UserInfo = function(type, isInfoPage) {
+			type = type || 0;
+			var user = Session.Get('user' + type);
+			if(user) {
+				$scope.user = JSON.parse(user)
+			} else {
+				db.user.info(type).then(function(r) {
+					r.gender != undefined && (r.sex = sex(r.gender));
+					r.status != undefined && (r.statusName = status(r.status));
+
+					Session.Set('user' + type, JSON.stringify(r));
+					if(r.status != undefined && r.status != "Verified" && isInfoPage == undefined) {
+						window.location.href = "hr-info.html";
+					}
+					$scope.user = r;
+				})
+			}
+
+		}
+	}
+]);
+
+app.controller('HRBindController', ['$scope', 'BaseService',
+	function($scope, db) {
+		var rurl = GetUrlParam('rurl');
+
+		$scope.user = { type: 0 };
+
+		$scope.Save = function() {
+			var item = $scope.user;
+			console.log(item)
+			if(!item.name) {
+				MsgError('请输入姓名')
+				return;
+			}
+			if(!item.tel) {
+				MsgError('请输入手机号')
+				return;
+			}
+			if(!item.sex) {
+				MsgError('必须选择性别')
+				return;
+			}
+
+			db.user.register(item).then(function(r) {
+				MsgSuccess("注册成功");
+				if(rurl) {
+					window.location.href = "hr-info.html";
+				}
+			})
+		}
+
+	}
+]);
+
+app.controller('HRInfoController', ['$scope', 'BaseService',
+	function($scope, db) {
+
+		$scope.UserInfo(0, true);
+
+		$scope.LinkTo = function(t) {
+			var page = "";
+			t == 1 && (page = "hr-tuijian.html");
+			t == 2 && (page = "hr-history.html");
+			if($scope.user.status == "Verified") {
+				window.location.href = page;
+			}
+		}
+
+	}
+]);
+
+app.controller('InfoListController', ['$scope', 'BaseService',
+	function($scope, db) {
+
+		$scope.List = function(index) {
+			$scope.pageIndex = index;
+			db.info.list($scope.pageSize, $scope.pageIndex)
+				.then(function(r) {
+					console.log(r)
+					console.log(typeof r)
+					$scope.infos = r.data;
+					$scope.total = r.total;
+				});
+		}
+		$scope.List(1);
+
+		$scope.Recommend = function(item) {
+			db.info.Recommend(item)
+				.then(function(r) {
+					MsgSuccess("推荐成功");
+					$scope.List(1);
+				});
+		}
+
 	}
 ]);
