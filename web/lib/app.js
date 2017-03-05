@@ -15,6 +15,32 @@ window.app.config(['$sceProvider', '$httpProvider',
 	}
 ]);
 
+window.app.filter('dateformat', function() {
+	return function(input, format) {
+		var d = input || '';
+		var f = format || 'yyyy-MM-dd HH:mm:ss';
+		if(d) {
+			d = new Date(d).Format(f);
+			return d;
+		} else
+			return ''
+	};
+});
+
+window.app.filter('status', function() {
+	return function(input) {
+		var d = input || '';
+		var r = "";
+
+		d == "Draft" && (r = "草稿");
+		d == "Published" && (r = "已发布");
+		d == "Canceled" && (r = "已撤销");
+		d == "Completed" && (r = "已完成");
+
+		return r;
+	};
+});
+
 function Loading(isshow, msg) {
 	var loading = document.getElementsByClassName('wx_loading')[0];
 	loading && loading.parentNode && loading.parentNode.removeChild(loading);

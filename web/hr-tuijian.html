@@ -12,32 +12,6 @@
 		<link rel="stylesheet" href="lib/m.css" />
 		<link rel="stylesheet" href="css/main.css" />
 		<style>
-			.blue-grey.darken-1 {
-				background-color: #00aa88 !important;
-			}
-			
-			.card .card-content {
-				padding: 10px 20px;
-			}
-			
-			.card .card-content .card-title {
-				line-height: 35px;
-			}
-			
-			.card .card-title {
-				font-size: 18px;
-			}
-			
-			.card .card-action {
-				padding: 10px 20px;
-				text-align: right;
-				border-top: 1px solid rgba(255, 255, 255, 0.5);
-			}
-			
-			.card .card-action a:not(.btn):not(.btn-large):not(.btn-floating) {
-				margin-right: 0;
-			}
-			
 			p {
 				-webkit-margin-before: 0em;
 				-webkit-margin-after: 0em;
@@ -52,6 +26,16 @@
 				text-align: right;
 				font-weight: bold;
 				font-size: 1.125em;
+			}
+			
+			.modal-footer td {
+				padding: 0;
+				text-align: center;
+				width: 50%;
+			}
+			
+			.modal-footer td>a{
+				float: none !important;
 			}
 		</style>
 	</head>
@@ -86,6 +70,27 @@
 							<a href="#" ng-click="Recommend(item)">我要推荐</a>
 						</div>
 					</div>
+				</div>
+			</div>
+
+			<!--<a class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a>-->
+
+			<div id="modal1" class="modal">
+				<div class="modal-content">
+					<h4>确认推荐</h4>
+					<p>A bunch of text</p>
+				</div>
+				<div class="modal-footer">
+					<table width="100%">
+						<tr>
+							<td>
+								<a href="#!" class="waves-effect waves-light btn disabled" ng-click="Cancel()">取消</a>
+							</td>
+							<td>
+								<a href="#!" class="waves-effect waves-light btn" ng-click="Confirm()">确定</a>
+							</td>
+						</tr>
+					</table>
 				</div>
 			</div>
 		</div>

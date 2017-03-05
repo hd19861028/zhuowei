@@ -69,10 +69,9 @@ app.controller('HRBindController', ['$scope', 'BaseService',
 			}
 
 			db.user.register(item).then(function(r) {
-				MsgSuccess("注册成功");
-				if(rurl) {
+				MsgSuccess("注册成功", function() {
 					window.location.href = "hr-info.html";
-				}
+				});
 			})
 		}
 
@@ -98,13 +97,29 @@ app.controller('HRInfoController', ['$scope', 'BaseService',
 
 app.controller('InfoListController', ['$scope', 'BaseService',
 	function($scope, db) {
+		
+		$scope.SelectedItem = null;
+		
+		$('.modal-trigger').leanModal({
+			dismissible: true
+		});
+
+		$scope.Confirm = function() {
+			db.info.Recommend($scope.SelectedItem)
+				.then(function(r) {
+					MsgSuccess("推荐成功");
+					$scope.List(1);
+				});
+		}
+
+		$scope.Cancel = function() {
+			$('#modal1').closeModal();
+		}
 
 		$scope.List = function(index) {
 			$scope.pageIndex = index;
 			db.info.list($scope.pageSize, $scope.pageIndex)
 				.then(function(r) {
-					console.log(r)
-					console.log(typeof r)
 					$scope.infos = r.data;
 					$scope.total = r.total;
 				});
@@ -112,12 +127,24 @@ app.controller('InfoListController', ['$scope', 'BaseService',
 		$scope.List(1);
 
 		$scope.Recommend = function(item) {
-			db.info.Recommend(item)
+			$scope.SelectedItem = item;
+			$('#modal1').openModal();
+		}
+
+	}
+]);
+
+app.controller('HistoryListController', ['$scope', 'BaseService',
+	function($scope, db) {
+
+		$scope.List = function(index) {
+			$scope.pageIndex = index;
+			db.info.history($scope.pageSize, $scope.pageIndex)
 				.then(function(r) {
-					MsgSuccess("推荐成功");
-					$scope.List(1);
+					$scope.infos = r;
 				});
 		}
+		$scope.List(1);
 
 	}
 ]);

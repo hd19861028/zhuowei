@@ -160,9 +160,36 @@ body {
 }
 
 .text-line1 {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+}
+
+.blue-grey.darken-1 {
+	background-color: #00aa88 !important;
+}
+
+.card .card-content {
+	padding: 10px 20px;
+}
+
+.card .card-content .card-title {
+	line-height: 35px;
+}
+
+.card .card-title {
+	font-size: 18px;
+}
+
+.card .card-action {
+	padding: 10px 20px;
+	text-align: right;
+	border-top: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.card .card-action a:not(.btn):not(.btn-large):not(.btn-floating) {
+	margin-right: 0;
+	font-weight: bold;
 }

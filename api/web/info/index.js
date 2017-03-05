@@ -33,4 +33,16 @@ app.get('/list', function(req, res) {
 		})
 });
 
+app.get('/history', function(req, res) {
+	var u = res.locals.userId;
+	var s = req.query.size;
+	var i = req.query.index;
+	bk.InfoHistory(u, s, i)
+		.then(function(r) {
+			res.json({ status: true, data: r })
+		}, function(e) {
+			res.json({ status: false, message: e })
+		})
+});
+
 exports = module.exports = app;

@@ -19,6 +19,9 @@ app.factory('BaseService', ['$q', '$http',
 				},
 				list: function(size, index) {
 					return _get(this.base + '/list', { size: size, index: index })
+				},
+				history: function(size, index) {
+					return _get(this.base + '/history', { size: size, index: index })
 				}
 			}
 		};
