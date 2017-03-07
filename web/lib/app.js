@@ -41,6 +41,22 @@ window.app.filter('status', function() {
 	};
 });
 
+window.app.filter('hisStatus', function() {
+	return function(input) {
+		var d = input || '';
+		var r = "";
+		
+		d == "New" && (r = "未处理");
+		d == "Reviewed" && (r = "已处理");
+		d == "Interviewed" && (r = "已面试");
+		d == "Employed" && (r = "已录用");
+		d == "Unemployed" && (r = "未录用");
+
+		return r;
+	};
+});
+
+
 function Loading(isshow, msg) {
 	var loading = document.getElementsByClassName('wx_loading')[0];
 	loading && loading.parentNode && loading.parentNode.removeChild(loading);
@@ -171,4 +187,77 @@ function MsgSuccess(msg, callback) {
 function MsgError(msg, callback) {
 	Msg('(ㄒㄒ) ' + msg, 'e', callback, 3);
 	Loading(false);
+}
+
+var Screen = {
+	/**
+	 * 获取页面可视宽度
+	 */
+	ViewWidth: function() {
+		var d = document;
+		var a = d.compatMode == "BackCompat" ? d.body : d.documentElement;
+		return a.clientWidth;
+	},
+	/**
+	 * 获取页面浏览器的真实宽度
+	 */
+	Width: function() {
+		var g = document;
+		var a = g.body;
+		var f = g.documentElement;
+		var d = g.compatMode == "BackCompat" ? a : g.documentElement;
+		return Math.max(f.scrollWidth, a.scrollWidth, d.clientWidth);
+	},
+	/**
+	 * 获取页面可视高度
+	 */
+	ViewHeight: function() {
+		var d = document;
+		var a = d.compatMode == "BackCompat" ? d.body : d.documentElement;
+		return a.clientHeight;
+	},
+	/**
+	 * 获取页面浏览器的真实高度
+	 */
+	Height: function() {
+		var g = document;
+		var a = g.body;
+		var f = g.documentElement;
+		var d = g.compatMode == "BackCompat" ? a : g.documentElement;
+		return Math.max(f.scrollHeight, a.scrollHeight, d.clientHeight);
+	},
+	/**
+	 * 获取元素的绝对Y坐标
+	 */
+	Top: function(e) {
+		try {
+			var offset = e.offsetTop;
+			if (e.offsetParent != null) offset += Screen.Top(e.offsetParent);
+			return offset;
+		} catch (e) {
+			return -1;
+		}
+	},
+	/**
+	 * 获取元素的绝对X坐标
+	 */
+	Left: function(e) {
+		var offset = e.offsetLeft;
+		if (e.offsetParent != null) offset += Screen.Left(e.offsetParent);
+		return offset;
+	},
+	/**
+	 * 获取滚动条顶部距离页面顶部的高度
+	 */
+	ScrollBar: function() {
+		var scrollPos;
+		if (window.pageYOffset) {
+			scrollPos = window.pageYOffset;
+		} else if (document.compatMode && document.compatMode != 'BackCompat') {
+			scrollPos = document.documentElement.scrollTop;
+		} else if (document.body) {
+			scrollPos = document.body.scrollTop;
+		}
+		return scrollPos;
+	}
 }

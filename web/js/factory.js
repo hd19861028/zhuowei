@@ -54,6 +54,8 @@ app.factory('BaseService', ['$q', '$http',
 
 		var _get = function(url, data) {
 			Loading(true);
+			data = data || {};
+			data.t = Math.random();
 			if(data) {
 				for(var k in data) {
 					if(data[k] === '') delete data[k]

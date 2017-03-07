@@ -43,6 +43,7 @@ app.controller('BaseController', ['$scope', 'BaseService',
 			}
 
 		}
+
 	}
 ]);
 
@@ -95,11 +96,11 @@ app.controller('HRInfoController', ['$scope', 'BaseService',
 	}
 ]);
 
-app.controller('InfoListController', ['$scope', 'BaseService',
-	function($scope, db) {
-		
+app.controller('InfoListController', ['$scope', '$window', 'BaseService',
+	function($scope, $window, db) {
+
 		$scope.SelectedItem = null;
-		
+
 		$('.modal-trigger').leanModal({
 			dismissible: true
 		});
@@ -115,13 +116,34 @@ app.controller('InfoListController', ['$scope', 'BaseService',
 		$scope.Cancel = function() {
 			$('#modal1').closeModal();
 		}
+		
+		$window.onscroll = function() {
+			var height = Screen.ScrollBar() + Screen.ViewHeight();
+			var totalheight = Screen.Height();
+
+			if(height >= totalheight) {
+				if($scope.pageIndex < $scope.maxPage && $scope.maxPage != 0) {
+					Loading(true);
+					$scope.pageIndex += 1;
+					console.log('onscroll', $scope.pageIndex)
+					$scope.List($scope.pageIndex);
+				}
+			}
+		}
 
 		$scope.List = function(index) {
 			$scope.pageIndex = index;
 			db.info.list($scope.pageSize, $scope.pageIndex)
 				.then(function(r) {
-					$scope.infos = r.data;
+					if(index == 1)
+						$scope.infos = r.data;
+					else {
+						for (var i = 0; i < r.data.length; i++) {
+							$scope.infos.push(r.data[i])
+						}
+					}
 					$scope.total = r.total;
+					$scope.maxPage = Math.ceil($scope.total / $scope.pageSize);
 				});
 		}
 		$scope.List(1);
@@ -134,14 +156,36 @@ app.controller('InfoListController', ['$scope', 'BaseService',
 	}
 ]);
 
-app.controller('HistoryListController', ['$scope', 'BaseService',
-	function($scope, db) {
+app.controller('HistoryListController', ['$scope', '$window', 'BaseService',
+	function($scope, $window, db) {
+
+		$window.onscroll = function() {
+			var height = Screen.ScrollBar() + Screen.ViewHeight();
+			var totalheight = Screen.Height();
+
+			if(height >= totalheight) {
+				if($scope.pageIndex < $scope.maxPage && $scope.maxPage != 0) {
+					Loading(true);
+					$scope.pageIndex += 1;
+					console.log('onscroll', $scope.pageIndex)
+					$scope.List($scope.pageIndex);
+				}
+			}
+		}
 
 		$scope.List = function(index) {
 			$scope.pageIndex = index;
 			db.info.history($scope.pageSize, $scope.pageIndex)
 				.then(function(r) {
-					$scope.infos = r;
+					if(index == 1)
+						$scope.infos = r.data;
+					else {
+						for (var i = 0; i < r.data.length; i++) {
+							$scope.infos.push(r.data[i])
+						}
+					}
+					$scope.total = r.total;
+					$scope.maxPage = Math.ceil($scope.total / $scope.pageSize);
 				});
 		}
 		$scope.List(1);

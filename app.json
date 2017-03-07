@@ -7,6 +7,8 @@
 			"--expose-gc",
 			"--max_old_space_size=300"
 		],
+		"error_file": "error.log",
+		"out_file": "info.log",
 		"exec_mode": "fork",
 		"pid_file": "./log/test.pid",
 		"watch": false,

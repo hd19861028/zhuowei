@@ -69,11 +69,13 @@ app.get('/redirect', function(req, res) {
 	var getUserInfo = function(oid) {
 		return bk.WeiXinBinding(oid)
 			.then(function(r) {
+				console.log(r)
 				res.setCookies(global.ckey.userid, r.userID, config.openid_expire);
 				res.setCookiesSafe(global.ckey.openid, oid, config.openid_expire);
 				return bk.UserInfo(r.userID, type)
 			})
 			.then(function(r) {
+				console.log(r)
 				if(r.status != undefined) {
 					//https://api.weixin.qq.com/cgi-bin/user/info?access_token=&openid=&lang=zh_CN
 					//如果用户是HR，根据status状态判断当前是否已审批
