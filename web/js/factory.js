@@ -36,8 +36,7 @@ app.factory('BaseService', ['$q', '$http',
 		var _post = function(url, data) {
 			Loading(true);
 			var d = $q.defer();
-
-			$http.post(url, JSON.stringify(data), _header)
+			$http.post(url, JSON.stringify(data), angular.copy(_header))
 				.success(function(r, statusCode) {
 					Loading(false);
 					if(r.status) {
@@ -70,7 +69,9 @@ app.factory('BaseService', ['$q', '$http',
 				responseType: 'json',
 				params: data
 			};
-			angular.extend(_param, JSON.parse(JSON.stringify(_header)));
+			
+			angular.extend(_param, angular.copy(_header));
+			
 			$http(_param)
 				.success(function(r, statusCode) {
 					Loading(false);

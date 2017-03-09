@@ -100,24 +100,18 @@ app.controller('InfoListController', ['$scope', '$window', 'BaseService',
 	function($scope, $window, db) {
 
 		$scope.SelectedItem = null;
-		$scope.Start = false;
 
 		$('.modal-trigger').leanModal({
 			dismissible: true
 		});
 
-		$scope.Confirm = function() {
-			if($scope.Start == false) {
-				$scope.Start = true;
-				db.info.recommend($scope.SelectedItem)
-					.then(function(r) {
-						MsgSuccess("推荐成功");
-						$('#modal1').closeModal();
-						$scope.List(1);
-					}, function(){
-						$scope.Start = false;
-					});
-			}
+		$scope.ConfirmToSubmit = function() {
+			var _item = angular.copy($scope.SelectedItem)
+			db.info.recommend(_item).then(function(r) {
+				MsgSuccess("推荐成功");
+				$('#modal1').closeModal();
+				$scope.List(1);
+			}, function() {});
 
 		}
 
@@ -152,7 +146,6 @@ app.controller('InfoListController', ['$scope', '$window', 'BaseService',
 					}
 					$scope.total = r.total;
 					$scope.maxPage = Math.ceil($scope.total / $scope.pageSize);
-					$scope.Start = false;
 				});
 		}
 		$scope.List(1);
