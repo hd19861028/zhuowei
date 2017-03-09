@@ -20,7 +20,7 @@ window.app.filter('dateformat', function() {
 		var d = input || '';
 		var f = format || 'yyyy-MM-dd';
 		if(d) {
-			d = new Date(d).Format(f);
+			d = new Date(d).ToFormatString(f);
 			return d;
 		} else
 			return ''
@@ -277,4 +277,61 @@ var Screen = {
 		}
 		return scrollPos;
 	}
+}
+
+/**
+ * 扩展方法：日期类型格式化成指定格式的字符串形式，参数形式yyyy-MM-dd HH:mm:ss
+ */
+Date.prototype.ToFormatString = function(format) {
+	var formatstr = format;
+	if(format != null && format != "") {
+		if(formatstr.indexOf("yyyy") >= 0) {
+			formatstr = formatstr.replace("yyyy", this.getFullYear());
+		}
+		if(formatstr.indexOf("MM") >= 0) {
+			var month = this.getMonth() + 1;
+			if(month < 10) {
+				month = "0" + month;
+			}
+			formatstr = formatstr.replace("MM", month);
+		}
+		if(formatstr.indexOf("dd") >= 0) {
+			var day = this.getDate();
+			if(day < 10) {
+				day = "0" + day;
+			}
+			formatstr = formatstr.replace("dd", day);
+		}
+		var hours = this.getHours();
+		if(formatstr.indexOf("HH") >= 0) {
+			if(hours < 10) {
+				hours = "0" + hours;
+			}
+			formatstr = formatstr.replace("HH", hours);
+		}
+		if(formatstr.indexOf("hh") >= 0) {
+			if(hours > 12) {
+				hours = hours - 12;
+			}
+			if(hours < 10) {
+				hours = "0" + hours;
+			}
+			formatstr = formatstr.replace("hh", hours);
+		}
+		if(formatstr.indexOf("mm") >= 0) {
+			var minute = this.getMinutes();
+			if(minute < 10) {
+				minute = "0" + minute;
+			}
+			formatstr = formatstr.replace("mm", minute);
+		}
+		if(formatstr.indexOf("ss") >= 0) {
+			var second = this.getSeconds();
+			if(second < 10) {
+				second = "0" + second;
+			}
+			formatstr = formatstr.replace("ss", second);
+		}
+	}
+	return formatstr;
 }
