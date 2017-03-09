@@ -39,10 +39,12 @@ app.factory('BaseService', ['$q', '$http',
 
 			$http.post(url, JSON.stringify(data), _header)
 				.success(function(r, statusCode) {
+					Loading(false);
 					if(r.status) {
 						d.resolve(r.data);
 					} else {
 						MsgError(r.message);
+						d.reject(r.message);
 					}
 				})
 				.error(function(err, status) {
@@ -71,6 +73,7 @@ app.factory('BaseService', ['$q', '$http',
 			angular.extend(_param, JSON.parse(JSON.stringify(_header)));
 			$http(_param)
 				.success(function(r, statusCode) {
+					Loading(false);
 					if(r.status) {
 						d.resolve(r.data);
 					} else {

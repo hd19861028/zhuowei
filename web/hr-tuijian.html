@@ -41,12 +41,6 @@
 	</head>
 
 	<body ng-controller="BaseController">
-		<div class="wx_loading" id="wxloading">
-			<div class="wx_loading_inner">
-				<i class="wx_loading_icon"></i> 页面加载中…
-			</div>
-		</div>
-
 		<div class="container" ng-controller="InfoListController">
 			<div class="row" ng-repeat="item in infos">
 				<div class="col s12 m6">
@@ -63,11 +57,11 @@
 								<div class="col s12 text-line1" ng-bind="item.description"></div>
 							</div>
 							<div class="row" ng-show="item.remarks && item.remarks.length>0">
-								<div class="col s12 text-line1" ng-bind="item.remarks"></div>
+								<div class="col s12" ng-bind="item.remarks"></div>
 							</div>
 						</div>
 						<div class="card-action">
-							<a href="#" ng-click="Recommend(item)">我要推荐</a>
+							<a href="" ng-click="Recommend(item)">我要推荐</a>
 						</div>
 					</div>
 				</div>
@@ -78,16 +72,16 @@
 			<div id="modal1" class="modal">
 				<div class="modal-content">
 					<h4>确认推荐</h4>
-					<p>A bunch of text</p>
+					<p>确定推荐{{SelectedItem.title}}吗？</p>
 				</div>
 				<div class="modal-footer">
 					<table width="100%">
 						<tr>
 							<td>
-								<a href="#!" class="waves-effect waves-light btn disabled" ng-click="Cancel()">取消</a>
+								<a href="" class="waves-effect waves-light btn disabled" ng-click="Cancel()">取消</a>
 							</td>
 							<td>
-								<a href="#!" class="waves-effect waves-light btn" ng-click="Confirm()">确定</a>
+								<a href="" class="waves-effect waves-light btn" ng-click="Confirm()">确定</a>
 							</td>
 						</tr>
 					</table>

@@ -109,7 +109,6 @@ body {
 	right: 0;
 	z-index: 90;
 	background-color: transparent;
-	display: none;
 }
 
 .wx_loading_inner {
@@ -192,4 +191,20 @@ body {
 .card .card-action a:not(.btn):not(.btn-large):not(.btn-floating) {
 	margin-right: 0;
 	font-weight: bold;
+}
+
+.smile {
+	background-image: url(smile.png);
+	float: right;
+	width: 25px;
+	height: 25px;
+	margin-top: 5px;
+}
+
+.sorry {
+	background-image: url(sorry.png);
+	float: right;
+	width: 25px;
+	height: 25px;
+	margin-top: 5px;
 }

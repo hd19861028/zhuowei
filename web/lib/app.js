@@ -18,7 +18,7 @@ window.app.config(['$sceProvider', '$httpProvider',
 window.app.filter('dateformat', function() {
 	return function(input, format) {
 		var d = input || '';
-		var f = format || 'yyyy-MM-dd HH:mm:ss';
+		var f = format || 'yyyy-MM-dd';
 		if(d) {
 			d = new Date(d).Format(f);
 			return d;
@@ -46,11 +46,28 @@ window.app.filter('hisStatus', function() {
 		var d = input || '';
 		var r = "";
 		
+		d == "Published" && (r = "未完成");
 		d == "New" && (r = "未处理");
 		d == "Reviewed" && (r = "已处理");
 		d == "Interviewed" && (r = "已面试");
 		d == "Employed" && (r = "已录用");
 		d == "Unemployed" && (r = "未录用");
+		d == "Completed" && (r = "已完成");
+
+		return r;
+	};
+});
+
+window.app.filter('hisStatusText', function() {
+	return function(input) {
+		var d = input || '';
+		var r = "";
+		
+		d == "New" && (r = "未完成");
+		d == "Reviewed" && (r = "未完成");
+		d == "Interviewed" && (r = "未完成");
+		d == "Employed" && (r = "已完成");
+		d == "Unemployed" && (r = "已完成");
 
 		return r;
 	};

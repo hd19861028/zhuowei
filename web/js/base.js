@@ -3,7 +3,7 @@ app.controller('BaseController', ['$scope', 'BaseService',
 	function($scope, db) {
 
 		$scope.info = {};
-		$scope.pageSize = 10;
+		$scope.pageSize = 6;
 
 		$('body').addClass('body-show');
 		$('select').material_select();
@@ -100,23 +100,31 @@ app.controller('InfoListController', ['$scope', '$window', 'BaseService',
 	function($scope, $window, db) {
 
 		$scope.SelectedItem = null;
+		$scope.Start = false;
 
 		$('.modal-trigger').leanModal({
 			dismissible: true
 		});
 
 		$scope.Confirm = function() {
-			db.info.Recommend($scope.SelectedItem)
-				.then(function(r) {
-					MsgSuccess("推荐成功");
-					$scope.List(1);
-				});
+			if($scope.Start == false) {
+				$scope.Start = true;
+				db.info.recommend($scope.SelectedItem)
+					.then(function(r) {
+						MsgSuccess("推荐成功");
+						$('#modal1').closeModal();
+						$scope.List(1);
+					}, function(){
+						$scope.Start = false;
+					});
+			}
+
 		}
 
 		$scope.Cancel = function() {
 			$('#modal1').closeModal();
 		}
-		
+
 		$window.onscroll = function() {
 			var height = Screen.ScrollBar() + Screen.ViewHeight();
 			var totalheight = Screen.Height();
@@ -138,12 +146,13 @@ app.controller('InfoListController', ['$scope', '$window', 'BaseService',
 					if(index == 1)
 						$scope.infos = r.data;
 					else {
-						for (var i = 0; i < r.data.length; i++) {
+						for(var i = 0; i < r.data.length; i++) {
 							$scope.infos.push(r.data[i])
 						}
 					}
 					$scope.total = r.total;
 					$scope.maxPage = Math.ceil($scope.total / $scope.pageSize);
+					$scope.Start = false;
 				});
 		}
 		$scope.List(1);
@@ -180,7 +189,7 @@ app.controller('HistoryListController', ['$scope', '$window', 'BaseService',
 					if(index == 1)
 						$scope.infos = r.data;
 					else {
-						for (var i = 0; i < r.data.length; i++) {
+						for(var i = 0; i < r.data.length; i++) {
 							$scope.infos.push(r.data[i])
 						}
 					}
