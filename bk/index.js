@@ -15,10 +15,10 @@ function _get(u, key) {
 	var d = q.defer();
 
 	request.Get(u, _header).then(function(r) {
-		console.log('路径')
-		console.log(u)
-		console.log('响应')
-		console.log(r)
+//		console.log('路径')
+//		console.log(u)
+//		console.log('响应')
+//		console.log(r)
 
 		if(r.status) {
 			if(key) d.resolve(r.data[key]);
@@ -37,12 +37,12 @@ function _post(u, p) {
 	var d = q.defer();
 	p = JSON.stringify(p);
 	request.Post(u, p, _header).then(function(r) {
-		console.log('路径')
-		console.log(u)
-		console.log('参数')
-		console.log(p)
-		console.log('响应')
-		console.log(r)
+//		console.log('路径')
+//		console.log(u)
+//		console.log('参数')
+//		console.log(p)
+//		console.log('响应')
+//		console.log(r)
 
 		if(r.status) {
 			d.resolve(r.data);
