@@ -131,6 +131,9 @@ app.post('/notification', function(req, res) {
 		var template = null;
 		try {
 			template = JSON.parse(result);
+			if(typeof template.data == "string"){
+				template.data = JSON.parse(template.data);
+			}
 			weixin.push_notise(template.openid, template.templateid, template.data, template.backurl)
 				.then(function(msg) {
 					if(msg == "") {
