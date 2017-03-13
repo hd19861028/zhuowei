@@ -54,10 +54,10 @@
 								</div>
 							</div>
 							<div class="row">
-								<pre><div class="col s12" ng-bind="item.description"></div></pre>
+								<div class="col s12" ng-bind-html="item.description"></div>
 							</div>
 							<div class="row" ng-show="item.remarks && item.remarks.length>0">
-								<pre><div class="col s12" ng-bind="item.remarks"></div></pre>
+								<div class="col s12" ng-bind-html="item.remarks"></div>
 							</div>
 						</div>
 						<div class="card-action">
