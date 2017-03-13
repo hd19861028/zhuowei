@@ -44,6 +44,11 @@ app.controller('BaseController', ['$scope', 'BaseService',
 
 		}
 
+		$scope.FormatHtml = function(str) {
+			str = str || "";
+			return str.replace(/\n/ig, '<br>').replace(/\t/ig, '&emsp;').replace(/ /ig, '&nbsp;');
+		}
+
 	}
 ]);
 
@@ -137,6 +142,10 @@ app.controller('InfoListController', ['$scope', '$window', 'BaseService',
 			$scope.pageIndex = index;
 			db.info.list($scope.pageSize, $scope.pageIndex)
 				.then(function(r) {
+					for(var i = 0; i < r.data.length; i++) {
+						r.data[i].description = $scope.FormatHtml(r.data[i].description)
+						r.data[i].remarks = $scope.FormatHtml(r.data[i].remarks)
+					}
 					if(index == 1)
 						$scope.infos = r.data;
 					else {
@@ -179,6 +188,10 @@ app.controller('HistoryListController', ['$scope', '$window', 'BaseService',
 			$scope.pageIndex = index;
 			db.info.history($scope.pageSize, $scope.pageIndex)
 				.then(function(r) {
+					for(var i = 0; i < r.data.length; i++) {
+						r.data[i].description = $scope.FormatHtml(r.data[i].description)
+						r.data[i].remarks = $scope.FormatHtml(r.data[i].remarks)
+					}
 					if(index == 1)
 						$scope.infos = r.data;
 					else {
