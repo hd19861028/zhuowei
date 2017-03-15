@@ -158,4 +158,38 @@ app.post('/notification', function(req, res) {
 	});
 });
 
+app.post('/menu', function(req, res) {
+	var result = "";
+	var data = {}
+
+	req.on('data', function(chunk) {
+		result += chunk.toString();
+	});
+	req.on('end', function() {
+		var template = null;
+		try {
+			template = JSON.parse(result);
+			
+			weixin.get_access_token()
+				.then(function(token) {
+					var _url = 'https://api.weixin.qq.com/cgi-bin/menu/create?access_token='+token;
+					return request.Post(_url, result)
+				})
+				.then(function(r) {
+					res.json(r);
+				})
+				.catch(function(e) {
+					console.log(e)
+					data.status = false;
+					data.msg = msg.stack || msg;
+					res.json(data);
+				})
+		} catch(e) {
+			data.status = false;
+			data.msg = "无效的json格式";
+			res.json(data);
+		}
+	});
+});
+
 exports = module.exports = app;
