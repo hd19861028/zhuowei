@@ -1,6 +1,6 @@
 {
 	/** 全局模块路径 **/
-	"modulePath": "/opt/node/lib/node_modules/",
+	"modulePath": "",
 	/** 后台路径 **/
 	"bk": "http://localhost:3303/api/API",
 	/** 应用程序名称，用于输出kibana日志 **/
