@@ -48,7 +48,7 @@ app.get('/', function(req, res) {
 		'Expires': date,
 		'Content-Type': 'application/json'
 	});
-	var result = weixin.validateToken(req.query);
+	var result = weixin.validate_token(req.query);
 	res.end(result);
 });
 
